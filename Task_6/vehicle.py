@@ -1,23 +1,32 @@
 #Question 3
-
+from abc import ABC,abstractmethod
 #Base Class
-class Vehicle():
+class Vehicle(ABC):
     #Constructor with two arguments empty name and rental rate as 0
     def __init__(self,model="",rental_rate=0):
         self.model=model
         self.rental_rate=rental_rate
 
-    #Method to calculate rental
+    #An abstract method , no implementation here
+    @abstractmethod
     def calculate_rental(self):
         pass #not using
 
 #Subclass with parent class Vehicle
-class car(Vehicle):
-    def __init__(self):
-        #Getting the model name
-        print("Choose the Model\nLuxury\nSUV\nEconomy")
-        self.model=input()
+class Car(Vehicle):
+    def __init__(self,model):
+        super().__init__(model)
+
+        self.model=model
         self.rental_rate = 0
+
+    #to get the model name
+    def get_model(self):
+        return self.model
+
+    #to set the modified rental rate
+    def set_rental_rate(self,rate):
+        self.rental_rate=rate
 
     # Method Over-riding
     def calculate_rental(self):
@@ -26,25 +35,30 @@ class car(Vehicle):
         rental_hour=int(input())
 
         #Checking the condition according to the input and calculating the rental rate
-        if self.model=="Luxury":
-            self.rental_rate=5000*rental_hour
-            print(f"Luxury Car Rent: {rental_hour}--${self.rental_rate}")
+        if self.get_model()=="Luxury":
+            self.set_rental_rate(5000*rental_hour)
 
-        elif self.model=="SUV":
-            self.rental_rate = 500 * rental_hour
-            print(f"SUV Car Rent:{rental_hour}--${self.rental_rate}")
+        elif self.get_model()=="SUV":
+            self.set_rental_rate(500*rental_hour)
 
-        elif self.model=="Economy":
-            self.rental_rate = 50 * rental_hour
-            print(f"Economy Car Rent:{rental_hour}--${self.rental_rate}")
+        elif self.get_model()=="Economy":
+            self.set_rental_rate(50*rental_hour)
+
+        print(f"{self.get_model()}:{rental_hour}hr--${self.rental_rate}")
 
 #Subclass with parent class Vehicle
-class bike(Vehicle):
-    def __init__(self):
-        # Getting the Model name
-        print("Choose the Model\nElectric\nScooter\nHybrid")
-        self.model = input()
+class Bike(Vehicle):
+    def __init__(self,model):
+        super().__init__(model)
+
+        self.model = model
         self.rental_rate=0
+
+    def get_model(self):
+        return self.model
+
+    def set_rental_rate(self,rate):
+        self.rental_rate=rate
 
     def calculate_rental(self):
         # Getting Rental Days
@@ -52,25 +66,30 @@ class bike(Vehicle):
         rental_day = int(input())
 
         # Checking the condition according to the input and calculating the rental rate
-        if self.model=="Electric":
-            self.rental_rate=500*rental_day
-            print(f"{self.model} {rental_day}--${self.rental_rate}")
+        if self.get_model()=="Electric":
+            self.set_rental_rate(500*rental_day)
 
-        elif self.model=="Scooter":
-            self.rental_rate = 250 * rental_day
-            print(f"{self.model} {rental_day}--${self.rental_rate}")
+        elif self.get_model()=="Scooter":
+            self.set_rental_rate(250*rental_day)
 
-        elif self.model=="Hybrid":
-            self.rental_rate = 450 * rental_day
-            print(f"{self.model} {rental_day}--${self.rental_rate}")
+        elif self.get_model()=="Hybrid":
+            self.set_rental_rate(450*rental_day)
+
+        print(f"{self.get_model()}-{rental_day}days--${self.rental_rate}")
 
 #Subclass with parent class Vehicle
-class truck(Vehicle):
-    def __init__(self):
-        # Getting the Model name
-        print("Choose the Model\nClosed_Van\nOpen_Truck\n6_Wheeler")
-        self.model = input()
+class Truck(Vehicle):
+    def __init__(self,model):
+        super().__init__(model)
+
+        self.model = model
         self.rental_rate=0
+
+    def get_model(self):
+        return self.model
+
+    def set_rental_rate(self,rate):
+        self.rental_rate=rate
 
     def calculate_rental(self):
         # Getting Kilometers travelled
@@ -78,20 +97,17 @@ class truck(Vehicle):
         rental_km = int(input())
 
         # Checking the condition according to the input and calculating the rental rate
-        if self.model=="Closed_Van":
-            self.rental_rate=40*rental_km
-            print(f"{self.model} {rental_km}--${self.rental_rate}")
+        if self.get_model()=="Closed_Van":
+            self.set_rental_rate(40 * rental_km)
 
-        elif self.model=="Open_Truck":
-            self.rental_rate=35*rental_km
-            print(f"{self.model} {rental_km}--${self.rental_rate}")
+        elif self.get_model()=="Open_Truck":
+            self.set_rental_rate(35 * rental_km)
 
-        elif self.model=="6_Wheeler":
-            self.rental_rate = 30 * rental_km
-            print(f"{self.model} {rental_km}--${self.rental_rate}")
+        elif self.get_model()=="6_Wheeler":
+            self.set_rental_rate(30 * rental_km)
 
-#Creating an Object for the parent class
-Vehicle_object=Vehicle()
+        print(f"{self.get_model()}-{rental_km}km--${self.rental_rate}")
+
 
 #Asking to choose the vehicle type
 print("Guvi Rental\nChoose the type of Vehicle\n1. Car\n2. Bike\n3. Truck")
@@ -99,13 +115,20 @@ vehicle_option=int(input())
 
 #Creating object for the subclasses and Calling the method according to the input
 if vehicle_option==1:
-    car_object = car()
+    #getting the input out of the class and sending the model name as argument
+    model_name=input("Choose the Model\nLuxury\nSUV\nEconomy: ")
+    car_object = Car(model_name)
     car_object.calculate_rental()
+
 elif vehicle_option==2:
-    bike_object = bike()
+    model_name = input("Choose the Model\nElectric\nScooter\nHybrid: ")
+    bike_object = Bike(model_name)
     bike_object.calculate_rental()
+
 elif vehicle_option==3:
-    truck_object = truck()
+    model_name = input("Choose the Model\nClosed_Van\nOpen_Truck\n6_Wheeler: ")
+    truck_object = Truck(model_name)
     truck_object.calculate_rental()
+
 else:
     print("Enter Valid option")
