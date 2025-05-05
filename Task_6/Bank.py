@@ -6,18 +6,30 @@ class BankAccount:
         print("Enter your Account Number:")
 
         #getting input as integer
-        self.accountnumber=int(input())
+        self.account_number=int(input())
 
         #declaring balance with minimum balance
-        self.balance=500
+        self._balance=500#private attribute
+
+    #getter method to retrieve the value of private attribute
+    def get_balance(self):
+        return self._balance
+
+    #Setter method to set or modify the value of private attribute
+    def set_balance(self,amount):
+        if self._balance >= 500:
+            self._balance=amount
+        else:
+            print("Maintain Sufficient balance")
 
     #Method Deposit
     def deposit(self):
         print("Enter the Amount to deposit")
         deposit=int(input())
 
-        #adding the deposit amount to the balance
-        self.balance+=deposit
+        #getting the value and adding.
+        #setting the modified values.
+        self.set_balance(self.get_balance()+deposit)
 
     #Method Withdraw
     def withdraw(self):
@@ -25,17 +37,21 @@ class BankAccount:
         withdraw= int(input())
 
         #subtracting the withdrawal amount from balance
-        self.balance -= withdraw
+        self._balance -= withdraw
 
         #Checking for minimum balance
-        if withdraw>self.balance:
+        if withdraw>self.get_balance():
               print("Insufficient Balance")
               #restricting to withdraw the amount
-              self.balance+=withdraw
-        elif self.balance<500:
+              self._balance+=withdraw
+
+        elif self.get_balance()-withdraw<500:
               print("Maintain Sufficient balance")
+
         else:
-              self.balance-=withdraw
+              # getting the value and subtracting.
+              # setting the modified values.
+              self.set_balance(self.get_balance()-withdraw)
 
 
 class SavingsAccount(BankAccount):
@@ -64,22 +80,18 @@ class SavingsAccount(BankAccount):
         # calculating the interest rate
         self.interest_rate=(self.loan*self.interest_rate*self.interest_time)/100
 
-        print("Interest Rate for 5 years",self.interest_rate)
+        #printing
+        print(f"Interest Rate for {self.interest_time} years : {int(self.interest_rate)}")
 
 #subcalss with parent BankAccount class
 class CurrentAccount(BankAccount):
     def __init__(self):
         super().__init__()
-        self.minimum_balance=500#declaring the minimum balance value
 
-    #Private method to chcek balance(encapsulation)
-    def __check_balance(self):
+    #Private method to check balance(encapsulation)
+    def check_balance(self):
         #Printing the balance
-        print("Account Balance :",self.balance)
-
-        #if the balance is less than minimum balance then this statement will execute
-        if self.balance <self.minimum_balance:
-            print("Maintain Minimum Balance")
+        print("Account Balance :",self.get_balance())
 
     #method to do actions according to the input
     def action(self):
@@ -98,12 +110,12 @@ class CurrentAccount(BankAccount):
                 self.withdraw()
             elif option==3:
                 #since it is private class(encapsulation) calling it using the object name
-                CurrentAccount_object.__check_balance()
+                self.check_balance()
             elif option==4:
-                #this calculate interest is a method from another subclass
+                #this calculates interest is a method from another subclass
                 #creating the object for the class and calling here
-                SavingsAccount_object = SavingsAccount()
-                SavingsAccount_object.calculate_interest()
+                savings_account_object = SavingsAccount()
+                savings_account_object.calculate_interest()
             elif option==5:
                 #to exit
                 break
@@ -111,7 +123,7 @@ class CurrentAccount(BankAccount):
                 print("Please Enter Valid option")
 
 
-#crating object for the subclass and calling action method
+#creating object for the subclass and calling action method
 CurrentAccount_object=CurrentAccount()
 CurrentAccount_object.action()
 
